@@ -4,6 +4,8 @@ import createHttpError from "http-errors";
 import Employee from "../../../../models/employee.model";
 import { isDocumentId, mongooseSchemaError } from "../../../../utils/pipes/validation.pipe";
 import sendEmail from "../../../../mails/send-email";
+import FRONTEND_URL from "../../../../utils/variables/variables";
+import Company from "../../../../models/company.model";
 
 type Body = {
    first_name: string;
@@ -19,12 +21,13 @@ export async function createEmployeeByCompanyID(req: Request, res: Response, nex
       if (!first_name || !last_name || !email || !password || !designation) {
          return next(createHttpError.BadRequest("first_name, last_name , email , password , designation required"));
       }
-
-      const employee = await Employee.findOne({ email }).select("+password");
+      const company_or_employee =
+         (await Company.findOne({ email })) || //
+         (await Employee.findOne({ email }));
 
       const designations: { _id: string; name: string }[] = req?.user?.company_details?.designations;
       const isDesignationMatch = designations?.find((item) => item?.name === designation);
-      if (employee) {
+      if (company_or_employee) {
          return next(createHttpError.BadRequest("employee email is already exist"));
       }
       if (!designations?.length) {
@@ -56,7 +59,7 @@ export async function createEmployeeByCompanyID(req: Request, res: Response, nex
                company_name: req.user?.company_details?.company_name,
                email: req.user?.email,
                current_year: new Date().getFullYear(),
-               auth_url: process.env.FRONTEND_URL + "/auth/login",
+               auth_url: FRONTEND_URL + "/auth/login",
             },
             employee: { first_name, last_name, email, password, designation },
          },
@@ -106,7 +109,7 @@ export async function getSingleEmployeeByCompanyID(req: Request, res: Response, 
          return next(createHttpError.NotFound("Employee not found!"));
       }
       res.status(200).json({
-         message: "Single employee successfully fetched!",
+         message: `${employee.email} employee successfully fetched!`,
          data: { employee },
          success: true,
       });

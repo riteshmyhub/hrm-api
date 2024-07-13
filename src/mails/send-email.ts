@@ -82,7 +82,7 @@ export default async function sendEmail({ to, cc, bcc, subject, from, context, t
          context: {
             project_name: project?.name,
             app_name: "project buddy",
-            link: `${process.env.FRONTEND_URL}/project-verification/2545?confirmation_token=b28fa66339bfd2d2477f`,
+            link: `${FRONTEND_URL}/project-verification/2545?confirmation_token=b28fa66339bfd2d2477f`,
          },
  });
 
