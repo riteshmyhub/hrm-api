@@ -6,7 +6,7 @@
    "scripts": {
       "start": "nodemon",
       "remove-cache": "npm cache clean --force",
-      "build": "tsc -p .",
+      "build": "tsc -p . && vercel --prod",
       "prod": "node ./dist/main.js",
       "test": "echo \"Error: no test specified\" && exit 1"
    },

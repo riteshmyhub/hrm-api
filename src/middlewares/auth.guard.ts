@@ -25,7 +25,9 @@ export default async function AuthGuard(req: Request, res: Response, next: NextF
       if (!user) {
          next(createHttpError.Unauthorized());
       }
-      
+      if (user?.isActive === false) {
+         next(createHttpError.Unauthorized());
+      }
       req.user = user;
       next();
    } catch (error: any) {
