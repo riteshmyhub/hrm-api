@@ -47,26 +47,6 @@ const projectSchema = new mongoose.Schema({
       },
    ],
    technologies: [{ type: String, unique: true }],
-   designations: [
-      {
-         type: {
-            name: {
-               type: String,
-               unique: true,
-               required: [true, "required title"],
-            },
-            post: {
-               type: Number,
-               required: [true, "required description"],
-            },
-            allocate: {
-               type: Number,
-               required: [true, "required description"],
-               default: 0,
-            },
-         },
-      },
-   ],
    sprints: [
       {
          type: {

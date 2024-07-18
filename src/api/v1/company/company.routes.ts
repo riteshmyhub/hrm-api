@@ -6,7 +6,7 @@ import { createEmployeeByCompanyID, deleteEmployeeByCompanyID, getEmployeesByCom
 import { updateCompanyPassword } from "./update-password/update-password.controller";
 import { updateCompanyProfile } from "./update-profile/update-profile.controller";
 import { employeeRestrict } from "./employee/employee-restrict/employee-restrict.controller";
-import { createCompanyProject, getCompanyProjects, getCompanyProjectBySlug, updateCompanyProjectBySlug } from "./projects/project.contoller";
+import { createCompanyProject, getCompanyProjects, getCompanyProjectById, updateCompanyProjectById } from "./projects/project.contoller";
 import { addCompanyFeature, deleteCompanyFeature } from "./projects/project-feature.controller";
 import { addCompanySprints, deleteCompanySprints } from "./projects/project.sprints.controller";
 
@@ -20,7 +20,7 @@ router.route("/update-password").post(updateCompanyPassword);
 router.route("/update-profile").put(updateCompanyProfile);
 router.route("/employee-restrict/:id").post(employeeRestrict);
 router.route("/projects").get(getCompanyProjects).post(createCompanyProject);
-router.route("/projects/:slug").get(getCompanyProjectBySlug).put(updateCompanyProjectBySlug);
-router.route("/projects/:slug/features").post(addCompanyFeature).delete(deleteCompanyFeature);
-router.route("/projects/:slug/sprints").post(addCompanySprints).delete(deleteCompanySprints);
+router.route("/projects/:id").get(getCompanyProjectById).put(updateCompanyProjectById);
+router.route("/projects/:id/features").post(addCompanyFeature).delete(deleteCompanyFeature);
+router.route("/projects/:id/sprints").post(addCompanySprints).delete(deleteCompanySprints);
 export default router;

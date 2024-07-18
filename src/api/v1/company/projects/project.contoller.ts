@@ -10,11 +10,11 @@ export async function createCompanyProject(req: Request, res: Response, next: Ne
       if (!name) {
          return next(createHttpError.BadRequest("name is required"));
       }
-      const slug = slugPipe(name);
-      const idDuplicate = await Project.findOne({ slug });
+      const idDuplicate = await Project.findOne({ name });
       if (idDuplicate) {
          return next(createHttpError.BadRequest("Project name is already taken"));
       }
+      const slug = slugPipe(name);
       await Project.create({ name, slug, company: req.user?._id });
       res.status(201).json({
          message: "Project successfully created!",
@@ -22,6 +22,8 @@ export async function createCompanyProject(req: Request, res: Response, next: Ne
          success: true,
       });
    } catch (error: any) {
+      console.log(error);
+
       next(createHttpError.InternalServerError("Internal Server Error"));
    }
 }
@@ -41,9 +43,12 @@ export async function getCompanyProjects(req: Request, res: Response, next: Next
    }
 }
 
-export async function getCompanyProjectBySlug(req: Request, res: Response, next: NextFunction) {
+export async function getCompanyProjectById(req: Request, res: Response, next: NextFunction) {
    try {
-      const project = await Project.findOne({ slug: req.params?.slug, company: req?.user?._id });
+      if (!isDocumentId(req.params?.id)) {
+         return next(createHttpError.BadRequest("Invalid project id"));
+      }
+      const project = await Project.findOne({ _id: req.params?.id, company: req?.user?._id });
       if (!project) {
          return next(createHttpError.NotFound("Project not found"));
       }
@@ -59,15 +64,19 @@ export async function getCompanyProjectBySlug(req: Request, res: Response, next:
    }
 }
 
-export async function updateCompanyProjectBySlug(req: Request, res: Response, next: NextFunction) {
+export async function updateCompanyProjectById(req: Request, res: Response, next: NextFunction) {
    try {
-      const project = await Project.findOne({ slug: req.params?.slug, company: req?.user?._id });
+      if (!isDocumentId(req.params?.id)) {
+         return next(createHttpError.BadRequest("Invalid project id"));
+      }
+      const project = await Project.findOne({ _id: req.params?.id, company: req?.user?._id });
       if (!project) {
          return next(createHttpError.NotFound("Project not found"));
       }
       if (!Object.keys(req.body)?.length) {
          return next(createHttpError.BadRequest("No data payload"));
       }
+
       if (req.body.name) {
          project.name = req.body.name;
          project.slug = slugPipe(req.body.name);

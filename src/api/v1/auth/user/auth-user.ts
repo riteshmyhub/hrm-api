@@ -11,6 +11,7 @@ export default async function authUser(req: Request, res: Response, next: NextFu
          success: true,
       });
    } catch (error: any) {
+      console.log(error);
       next(createHttpError.InternalServerError());
    }
 }

@@ -34,6 +34,9 @@ export default async function AuthGuard(req: Request, res: Response, next: NextF
       if (error.name === "TokenExpiredError") {
          return next(createHttpError.Forbidden());
       }
+      if (error.name === "JsonWebTokenError") {
+         return next(createHttpError.Unauthorized());
+      }
       next(createHttpError.InternalServerError());
    }
 }

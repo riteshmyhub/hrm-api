@@ -20,7 +20,10 @@ export async function addCompanySprints(req: Request, res: Response, next: NextF
    try {
       const { _id, title, status, updated_on, started_on }: Body = req.body;
 
-      const slug = req.params?.slug;
+      const projectId = req.params?.id;
+      if (!isDocumentId(projectId)) {
+         return next(createHttpError.BadRequest("Invalid project id!"));
+      }
       if (!title || !status || !updated_on || !started_on) {
          return next(createHttpError.BadRequest(`title, status, updated_on, started_on required!`));
       }
@@ -32,7 +35,7 @@ export async function addCompanySprints(req: Request, res: Response, next: NextF
       if (!statusType[status]) {
          return next(createHttpError.BadRequest("invalid status!"));
       }
-      const project = await Project.findOne({ slug, company: req.user._id });
+      const project = await Project.findOne({ _id: projectId, company: req.user._id });
 
       if (!project) {
          return next(createHttpError.NotFound("project not found!"));
@@ -44,8 +47,9 @@ export async function addCompanySprints(req: Request, res: Response, next: NextF
          if (!isDocumentId(_id as string)) {
             return next(createHttpError.BadRequest("invalid sprint id!"));
          }
+
          ProjectDB = await Project.findOneAndUpdate(
-            { slug: slug, "sprints._id": _id }, // Find document by slug and feature _id
+            { _id: projectId, "sprints._id": _id }, // Find document by projectId and feature _id
             { $set: { "sprints.$": payload } }, // Update the matching feature with the new body
             { new: true }
          );
@@ -53,7 +57,11 @@ export async function addCompanySprints(req: Request, res: Response, next: NextF
          if (project?.sprints.some((sprint: any) => sprint?.title === title)) {
             return next(createHttpError.BadRequest("sprint already exists!"));
          }
-         ProjectDB = await Project.findOneAndUpdate({ slug: slug }, { $push: { sprints: payload } }, { new: true });
+         ProjectDB = await Project.findOneAndUpdate(
+            { _id: projectId }, //
+            { $push: { sprints: payload } },
+            { new: true }
+         );
       }
       res.status(201).json({
          message: "project sprint successfully created",
@@ -69,12 +77,12 @@ export async function addCompanySprints(req: Request, res: Response, next: NextF
 
 export async function deleteCompanySprints(req: Request, res: Response, next: NextFunction) {
    try {
-      const slug = req.params?.slug;
-      const sprintID = req.query?.sprintID;
-      if (!isDocumentId(sprintID as string)) {
-         return next(createHttpError.BadRequest("invalid sprint id!"));
+      const projectId = req.params?.id;
+      const sprintID = req.body?.sprintID;
+      if (!isDocumentId(sprintID as string) || !isDocumentId(projectId as string)) {
+         return next(createHttpError.BadRequest("invalid sprint or project id!"));
       }
-      const project = await Project.findOne({ slug, company: req.user._id });
+      const project = await Project.findOne({ _id: projectId, company: req.user._id });
 
       if (!project) {
          return next(createHttpError.NotFound("project not found!"));
@@ -82,7 +90,11 @@ export async function deleteCompanySprints(req: Request, res: Response, next: Ne
       if (!project.sprints.some((ele) => ele._id?.toString() === sprintID?.toString())) {
          return next(createHttpError.NotFound("sprints not found!"));
       }
-      const updatedDocs = await Project.findOneAndUpdate({ slug: slug }, { $pull: { sprints: { _id: sprintID } } }, { new: true });
+      const updatedDocs = await Project.findOneAndUpdate(
+         { _id: projectId }, //
+         { $pull: { sprints: { _id: sprintID } } },
+         { new: true }
+      );
 
       res.status(201).json({
          message: "project feature successfully deleted!",
