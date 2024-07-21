@@ -6,7 +6,7 @@ import httpErrors from "http-errors";
 import routes from "./api/app";
 import fileUpload from "express-fileupload";
 import "./database/database";
-import FRONTEND_URL from "./utils/variables/variables";
+import morgan from "morgan";
 
 interface CustomError extends Error {
    status?: number;
@@ -32,6 +32,7 @@ const corsOptionsDelegate = (req: Request, callback: (err: Error | null, options
 
 // @middlewares
 if (process.env.AUTH_MODE_TYPE === "http-cookies-auth") app.use(cookieParser());
+app.use(morgan("tiny"));
 app.use(cors(corsOptionsDelegate));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

@@ -71,6 +71,8 @@ export async function createEmployeeByCompanyID(req: Request, res: Response, nex
          success: true,
       });
    } catch (error: any) {
+      console.log(error);
+
       if (error?.name === "ValidationError") {
          const schemaErrors = mongooseSchemaError(error);
          return next(createHttpError.BadRequest(schemaErrors.toString()));

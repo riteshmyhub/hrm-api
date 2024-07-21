@@ -46,7 +46,7 @@ const projectSchema = new mongoose.Schema({
          },
       },
    ],
-   technologies: [{ type: String, unique: true }],
+   technologies: [{ type: String }],
    sprints: [
       {
          type: {
