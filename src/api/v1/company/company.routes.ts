@@ -6,9 +6,10 @@ import { createEmployeeByCompanyID, deleteEmployeeByCompanyID, getEmployeesByCom
 import { updateCompanyPassword } from "./update-password/update-password.controller";
 import { updateCompanyProfile } from "./update-profile/update-profile.controller";
 import { employeeRestrict } from "./employee/employee-restrict/employee-restrict.controller";
-import { createCompanyProject, getCompanyProjects, getCompanyProjectById, updateCompanyProjectById } from "./projects/project.contoller";
+import { createCompanyProject, getCompanyProjects, getCompanyProjectById, updateCompanyProjectById, deleteProjectById } from "./projects/project.contoller";
 import { addCompanyFeature, deleteCompanyFeature } from "./projects/project-feature.controller";
 import { addCompanySprints, deleteCompanySprints } from "./projects/project.sprints.controller";
+import { addAllocation, deallocation, getResources } from "./projects/project-allocation.controller";
 
 const router = Router();
 router.use(AuthGuard, CompanyGuard); // middleware
@@ -20,7 +21,9 @@ router.route("/update-password").post(updateCompanyPassword);
 router.route("/update-profile").put(updateCompanyProfile);
 router.route("/employee-restrict/:id").post(employeeRestrict);
 router.route("/projects").get(getCompanyProjects).post(createCompanyProject);
-router.route("/projects/:id").get(getCompanyProjectById).put(updateCompanyProjectById);
+router.route("/projects/:id").get(getCompanyProjectById).put(updateCompanyProjectById).delete(deleteProjectById);
 router.route("/projects/:id/features").post(addCompanyFeature).delete(deleteCompanyFeature);
 router.route("/projects/:id/sprints").post(addCompanySprints).delete(deleteCompanySprints);
+
+router.route("/project-allocation").get(getResources).post(addAllocation).delete(deallocation);
 export default router;

@@ -39,7 +39,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(fileUpload({ useTempFiles: true }));
 app.use("/api/v1", routes);
 app.use(function (req, res, next) {
-   setTimeout(next, 2000);
+   setTimeout(next, 0);
 });
 app.use(async (req, res, next) => {
    next(httpErrors.NotFound());

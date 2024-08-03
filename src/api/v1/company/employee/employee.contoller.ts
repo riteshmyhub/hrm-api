@@ -105,7 +105,18 @@ export async function getSingleEmployeeByCompanyID(req: Request, res: Response, 
       if (!isDocumentId(_id)) {
          return next(createHttpError.BadRequest("_id is invalid"));
       }
-      const employee = await Employee.findOne({ _id, "employee_details.company": req?.user?._id }).populate({ path: "employee_details.company", model: "company" });
+      const employee = await Employee.findOne({ _id, "employee_details.company": req?.user?._id }).populate([
+         {
+            path: "employee_details.company", //
+            model: "company",
+            select:"-__v -role -isActive"
+         },
+         {
+            path: "employee_allocation.project", //
+            model: "project",
+            select:"-__v"
+         },
+      ]);
 
       if (!employee) {
          return next(createHttpError.NotFound("Employee not found!"));

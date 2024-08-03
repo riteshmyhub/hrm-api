@@ -16,11 +16,23 @@ export default async function AuthGuard(req: Request, res: Response, next: NextF
 
       const user =
          (await Company.findById(verifyUser?._id)) ||
-         (await Employee.findById(verifyUser?._id).populate({
-            path: "employee_details.company",
-            model: "company",
-            select: "company_details.company_name company_details.phone_number _id email",
-         }));
+         (await Employee.findById(verifyUser?._id).populate([
+            {
+               path: "employee_details.company", //
+               model: "company",
+               select: "company_details.company_name company_details.phone_number _id email",
+            },
+            {
+               path: "employee_allocation.project", //
+               model: "project",
+               select: "-__v",
+               populate: {
+                  path: "teams",
+                  model: "employee",
+                  select: "-__v -role -employee_details.skills -employee_allocation -employee_details.company -isActive",
+               },
+            },
+         ]));
 
       if (!user) {
          next(createHttpError.Unauthorized());

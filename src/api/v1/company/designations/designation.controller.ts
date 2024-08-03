@@ -17,7 +17,9 @@ export async function addNewDesignation(req: Request, res: Response, next: NextF
 
       res.status(201).json({
          message: "designation successfully created!",
-         data: { company },
+         data: {
+            designations: company?.company_details?.designations,
+         },
          success: true,
       });
    } catch (error: any) {
@@ -53,7 +55,9 @@ export async function updateDesignation(req: Request, res: Response, next: NextF
       await company?.save({ validateBeforeSave: true });
       return res.status(201).json({
          message: "designation successfully updates!",
-         data: { company },
+         data: {
+            designations: company?.company_details?.designations,
+         },
          success: true,
       });
    } catch (error: any) {
@@ -87,7 +91,7 @@ export async function deleteDesignation(req: Request, res: Response, next: NextF
 
       return res.status(201).json({
          message: "designation successfully deleted!",
-         data: { company },
+         data: { designations: company?.company_details?.designations },
          success: true,
       });
    } catch (error: any) {

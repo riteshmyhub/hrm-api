@@ -62,9 +62,9 @@ const projectSchema = new mongoose.Schema({
                type: Date,
                required: [true, "started_on is required"],
             },
-            updated_on: {
+            end_on: {
                type: Date,
-               required: [true, "updated_on is required"],
+               required: [true, "end_onis required"],
             },
          },
       },
@@ -102,16 +102,17 @@ const projectSchema = new mongoose.Schema({
    },
    teams: [
       {
-         type: {
-            employee: {
-               type: Schema.Types.ObjectId,
-               ref: "Employee",
-            },
-         },
+         type: Schema.Types.ObjectId,
+         ref: "Employee",
       },
    ],
 });
 
+projectSchema.path("teams").validate(function (value) {
+   const uniqueIds = new Set(value.map((id: string) => id.toString()));
+   return uniqueIds.size === value.length;
+}, "duplicate employee id");
+
 projectSchema.set("timestamps", true);
-const Project = mongoose.model("Project", projectSchema);
+const Project = mongoose.model("project", projectSchema);
 export default Project;

@@ -15,15 +15,14 @@ export async function createCompanyProject(req: Request, res: Response, next: Ne
          return next(createHttpError.BadRequest("Project name is already taken"));
       }
       const slug = slugPipe(name);
-      await Project.create({ name, slug, company: req.user?._id });
+      let project = await Project.create({ name, slug, company: req.user?._id });
+      const projects = await Project.find({ company: req?.user?._id });
       res.status(201).json({
          message: "Project successfully created!",
-         data: {},
+         data: { projects },
          success: true,
       });
    } catch (error: any) {
-      console.log(error);
-
       next(createHttpError.InternalServerError("Internal Server Error"));
    }
 }
@@ -48,7 +47,11 @@ export async function getCompanyProjectById(req: Request, res: Response, next: N
       if (!isDocumentId(req.params?.id)) {
          return next(createHttpError.BadRequest("Invalid project id"));
       }
-      const project = await Project.findOne({ _id: req.params?.id, company: req?.user?._id });
+      const project = await Project.findOne({ _id: req.params?.id, company: req?.user?._id }).populate({
+         path: "teams", //
+         model: "employee",
+         select: "-__v -role -employee_details.skills -isActive",
+      });
       if (!project) {
          return next(createHttpError.NotFound("Project not found"));
       }
@@ -64,6 +67,24 @@ export async function getCompanyProjectById(req: Request, res: Response, next: N
    }
 }
 
+export async function deleteProjectById(req: Request, res: Response, next: NextFunction) {
+   try {
+      if (!isDocumentId(req.params?.id)) {
+         return next(createHttpError.BadRequest("Invalid project id"));
+      }
+      const project = await Project.findOneAndDelete({ _id: req.params?.id, company: req?.user?._id });
+      if (!project) {
+         return next(createHttpError.NotFound("Project not found!"));
+      }
+      res.status(200).json({
+         message: "project successfully deleted!",
+         data: {},
+         success: true,
+      });
+   } catch (error) {
+      next(createHttpError.InternalServerError());
+   }
+}
 export async function updateCompanyProjectById(req: Request, res: Response, next: NextFunction) {
    try {
       if (!isDocumentId(req.params?.id)) {
@@ -91,7 +112,7 @@ export async function updateCompanyProjectById(req: Request, res: Response, next
       await project.save();
       res.status(200).json({
          message: "Project update successfully",
-         data: {},
+         data: { project },
          success: true,
       });
    } catch (error) {

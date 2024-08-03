@@ -48,7 +48,7 @@ export async function addCompanyFeature(req: Request, res: Response, next: NextF
       res.status(201).json({
          message: "project feature successfully created",
          data: {
-            project: ProjectDB,
+            features: ProjectDB?.features,
          },
          success: true,
       });
@@ -77,7 +77,7 @@ export async function deleteCompanyFeature(req: Request, res: Response, next: Ne
       res.status(201).json({
          message: "project feature successfully deleted!",
          data: {
-            project: updatedDocs,
+            features: updatedDocs?.features,
          },
          success: true,
       });

@@ -26,6 +26,18 @@ const employeeSchema = new mongoose.Schema({
       select: false,
    },
    //---------employee_details----------
+   employee_allocation: {
+      isAllocate: {
+         type: Boolean,
+         default: false,
+      },
+      start_date: Date,
+      end_date: Date,
+      project: {
+         type: mongoose.Schema.Types.ObjectId,
+         ref: "Project",
+      },
+   },
    employee_details: {
       company: {
          type: mongoose.Schema.Types.ObjectId,

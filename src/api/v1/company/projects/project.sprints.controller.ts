@@ -8,7 +8,7 @@ type Body = Readonly<{
    title: string;
    status: "planning" | "running" | "completed";
    started_on: string;
-   updated_on: string;
+   end_on: string;
 }>;
 
 type StatusType = Readonly<{
@@ -18,13 +18,13 @@ type StatusType = Readonly<{
 }>;
 export async function addCompanySprints(req: Request, res: Response, next: NextFunction) {
    try {
-      const { _id, title, status, updated_on, started_on }: Body = req.body;
+      const { _id, title, status, end_on, started_on }: Body = req.body;
 
       const projectId = req.params?.id;
       if (!isDocumentId(projectId)) {
          return next(createHttpError.BadRequest("Invalid project id!"));
       }
-      if (!title || !status || !updated_on || !started_on) {
+      if (!title || !status || !end_on || !started_on) {
          return next(createHttpError.BadRequest(`title, status, updated_on, started_on required!`));
       }
       const statusType: StatusType = {
@@ -42,7 +42,7 @@ export async function addCompanySprints(req: Request, res: Response, next: NextF
       }
 
       let ProjectDB = null;
-      const payload = { _id, title, status, updated_on, started_on };
+      const payload = { _id, title, status, end_on, started_on };
       if (_id) {
          if (!isDocumentId(_id as string)) {
             return next(createHttpError.BadRequest("invalid sprint id!"));
@@ -66,7 +66,7 @@ export async function addCompanySprints(req: Request, res: Response, next: NextF
       res.status(201).json({
          message: "project sprint successfully created",
          data: {
-            project: ProjectDB,
+            sprints: ProjectDB?.sprints,
          },
          success: true,
       });
@@ -99,7 +99,7 @@ export async function deleteCompanySprints(req: Request, res: Response, next: Ne
       res.status(201).json({
          message: "project feature successfully deleted!",
          data: {
-            project: updatedDocs,
+            sprints: updatedDocs?.sprints,
          },
          success: true,
       });
