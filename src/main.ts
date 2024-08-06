@@ -7,12 +7,15 @@ import routes from "./api/app";
 import fileUpload from "express-fileupload";
 import "./database/database";
 import morgan from "morgan";
+import bucket from "./utils/functions/cloudinary";
+import helmet from "helmet";
 
 interface CustomError extends Error {
    status?: number;
 }
 
 const app = express();
+bucket.init();
 const port: number = Number(process.env.PORT) || 3000;
 
 const allowlist: string[] = [
@@ -32,6 +35,7 @@ const corsOptionsDelegate = (req: Request, callback: (err: Error | null, options
 
 // @middlewares
 if (process.env.AUTH_MODE_TYPE === "http-cookies-auth") app.use(cookieParser());
+app.use(helmet());
 app.use(morgan("tiny"));
 app.use(cors(corsOptionsDelegate));
 app.use(express.json());

@@ -3,6 +3,7 @@ import createHttpError from "http-errors";
 import Project from "../../../../models/project.model";
 import { slugPipe } from "../../../../utils/pipes/string.pipe";
 import { isDocumentId } from "../../../../utils/pipes/validation.pipe";
+import bucket from "../../../../utils/functions/cloudinary";
 
 export async function createCompanyProject(req: Request, res: Response, next: NextFunction) {
    try {
@@ -103,12 +104,20 @@ export async function updateCompanyProjectById(req: Request, res: Response, next
          project.slug = slugPipe(req.body.name);
       }
       if (req.body.image) {
-         console.log(req.body.image);
+         const fileRes = await bucket.uploadFile({
+            file: req.body.image, options: {
+               folder: "projects",
+               overwrite: true,
+               public_id: project?._id.toString(),
+            }
+         })
+         project.image = fileRes.url;
       }
       if (req.body.description) project.description = req.body.description;
       if (req.body.platform) project.platform = req.body.platform;
       if (req.body.platform) project.release_plan = req.body.release_plan;
       if (req.body["technology[]"]) project.technologies = req.body["technology[]"];
+
       await project.save();
       res.status(200).json({
          message: "Project update successfully",
