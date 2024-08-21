@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import createHttpError from "http-errors";
-import Employee from "../../../../models/employee.model";
+import Employee from "../../../../../models/employee.model";
 import bcryptjs from "bcryptjs";
 
 type Body = {

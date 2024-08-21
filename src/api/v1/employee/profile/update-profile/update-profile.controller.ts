@@ -1,10 +1,9 @@
 import { NextFunction, Request, Response } from "express";
 import createHttpError from "http-errors";
-import Employee from "../../../../models/employee.model";
-import bucket from "../../../../utils/functions/cloudinary";
-import { UploadApiOptions, v2 as cloudinary } from "cloudinary";
+import Employee from "../../../../../models/employee.model";
+import bucket from "../../../../../utils/functions/cloudinary";
 
-export async function updateProfile(req: Request, res: Response, next: NextFunction) {
+export async function updateEmployeeProfile(req: Request, res: Response, next: NextFunction) {
    try {
       const { first_name, last_name, linkedin_username, about, total_experience, avatar } = req.body;
       const updateFields: any = {};

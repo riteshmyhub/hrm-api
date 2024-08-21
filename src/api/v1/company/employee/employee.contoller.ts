@@ -53,7 +53,7 @@ export async function createEmployeeByCompanyID(req: Request, res: Response, nex
       const mail = await sendEmail({
          to: [email],
          from: req.user?.email,
-         subject: "Welcome to the Team!",
+         subject: `Welcome to ${req.user?.company_details?.company_name}!`,
          context: {
             company: {
                company_name: req.user?.company_details?.company_name,
@@ -109,12 +109,12 @@ export async function getSingleEmployeeByCompanyID(req: Request, res: Response, 
          {
             path: "employee_details.company", //
             model: "company",
-            select:"-__v -role -isActive"
+            select: "-__v -role -isActive"
          },
          {
             path: "employee_allocation.project", //
             model: "project",
-            select:"-__v"
+            select: "-__v"
          },
       ]);
 

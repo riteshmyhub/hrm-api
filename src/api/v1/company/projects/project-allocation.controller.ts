@@ -4,6 +4,7 @@ import { isValidObjectId } from "mongoose";
 import Project from "../../../../models/project.model";
 import Employee from "../../../../models/employee.model";
 import { isValidDate } from "../../../../utils/pipes/validation.pipe";
+import sendEmail from "../../../../mails/send-email";
 
 export async function getResources(request: Request, response: Response, next: NextFunction) {
    try {
@@ -76,6 +77,24 @@ export async function addAllocation(request: Request, response: Response, next: 
          end_date: endDate,
       };
       await employee.save();
+
+      const mail = await sendEmail({
+         to: [employee.email],
+         from: request.user?.email,
+         subject: `${request?.user?.company_details?.company_name} - Project Allocation (${project?.name})`,
+         context: {
+            props: {
+               companyName: request?.user?.company_details?.company_name,
+               projectName: project.name,
+               employeeName: `${employee.employee_details?.first_name} ${employee.employee_details?.last_name}`,
+               startDate: new Date(Date.now()),
+               endDate: endDate,
+               role: employee.employee_details?.designation,
+               year: new Date().getFullYear(),
+            },
+         },
+         templateName: "project-allocation.mail",
+      });
 
       response.status(201).json({
          message: "Allocation added successfully",

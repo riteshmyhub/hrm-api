@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Allocation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+        }
+
+        .content {
+            margin: 20px 0;
+        }
+
+        .footer {
+            margin-top: 20px;
+            text-align: center;
+            color: #777;
+        }
+
+        .highlight {
+            background-color: #f0f0f0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Project Allocation ({{props.projectName}})</h1>
+        </div>
+        <div class="content">
+            <p>Dear {{props.employeeName}},</p>
+            <p>We are pleased to inform you that you have been allocated to the following project:</p>
+            <div class="highlight">
+                <p><strong>Project Name:</strong> {{props.projectName}}</p>
+                {{!-- <p><strong>Project Manager:</strong> {{props.projectManager}}</p> --}}
+                <p><strong>Start Date:</strong> {{props.startDate}}</p>
+                <p><strong>End Date:</strong> {{props.endDate}}</p>
+            </div>
+            <p>Please find the details of your role and responsibilities below:</p>
+            <div class="highlight">
+                <p><strong>Role:</strong> {{props.role}}</p>
+            </div>
+            <p>If you have any questions or need further information, please feel free to reach out to your project
+                manager.</p>
+            <p>We look forward to your valuable contribution to the project.</p>
+            <p>Best Regards,</p>
+            <p>{{props.companyName}}</p>
+        </div>
+        <div class="footer">
+            <p>&copy; {{props.year}} {{props.companyName}}. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+
+</html>

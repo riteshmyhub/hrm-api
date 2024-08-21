@@ -1,11 +1,11 @@
 import { Router } from "express";
-import { updateEmployeePassword } from "./update-password/update-password.controller";
 import AuthGuard from "../../../middlewares/auth.guard";
-import { updateProfile } from "./update-profile/update-profile.controller";
+import EmployeeProfileModule from "./profile/profile.module";
+import WorkspaceModule from "./workspace/workspace.module";
 
 const router = Router();
 router.use(AuthGuard); // middleware
-router.route("/update-password").post(updateEmployeePassword);
-router.route("/update-profile").put(updateProfile);
+router.use("/profile", new EmployeeProfileModule().routes);
+router.use("/workspace", new WorkspaceModule().routes);
 
 export default router;
