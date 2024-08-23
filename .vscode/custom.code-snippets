@@ -1,0 +1,23 @@
+{
+  "Express Controller": {
+    "prefix": "ctrl",
+    "body": [
+      "import { NextFunction, Request, Response } from \"express\";",
+      "import createHttpError from \"http-errors\";",
+      "",
+      "export default async function ${TM_FILENAME_BASE}(req: Request, res: Response, next: NextFunction) {",
+      "   try {",
+      "      const body = req.body;",
+      "      res.status(201).json({",
+      "         success: true,",
+      "         data: {},",
+      "         message: \"successfully\",",
+      "      });",
+      "   } catch (error) {",
+      "      next(createHttpError.InternalServerError());",
+      "   }",
+      "}"
+    ],
+    "description": "Express typescript controller"
+  }
+}

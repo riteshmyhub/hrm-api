@@ -2,8 +2,6 @@ import { UploadApiOptions, v2 as cloudinary } from "cloudinary";
 
 //cloudinary config
 
-
-
 function init() {
    cloudinary.config({
       cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
