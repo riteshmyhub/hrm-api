@@ -52,7 +52,6 @@ export default async function CreateEmployeeController(req: Request, res: Respon
 
       const mail = await sendEmail({
          to: [email],
-         from: req.user?.email,
          subject: `Welcome to ${req.user?.company_details?.company_name}!`,
          context: {
             company: {

@@ -63,7 +63,6 @@ export default async function AddMemberController(req: Request, res: Response, n
 
       const mail = await sendEmail({
          to: [employee.email],
-         from: req.user?.email,
          subject: `${req?.user?.company_details?.company_name} - Project Allocation (${project?.name})`,
          context: {
             props: {
