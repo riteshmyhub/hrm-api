@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import createHttpError from "http-errors";
-import { isDocumentId } from "../../../../../utils/pipes/validation.pipe";
 import Company from "../../../../../models/company.model";
+import { isValidObjectId } from "mongoose";
 
 export default async function DeleteDesignationController(req: Request, res: Response, next: NextFunction) {
    try {
@@ -9,7 +9,7 @@ export default async function DeleteDesignationController(req: Request, res: Res
       if (!_id) {
          return next(createHttpError.BadRequest("name , _id is required!"));
       }
-      if (!isDocumentId(_id)) {
+      if (!isValidObjectId(_id)) {
          return next(createHttpError.BadRequest("invalid _id"));
       }
       const company = await Company.findOneAndUpdate(

@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import createHttpError from "http-errors";
-import { isDocumentId } from "../../../../../utils/pipes/validation.pipe";
 import Employee from "../../../../../models/employee.model";
+import { isValidObjectId } from "mongoose";
 
 export default async function EmployeeRestrictController(req: Request, res: Response, next: NextFunction) {
    try {
@@ -11,7 +11,7 @@ export default async function EmployeeRestrictController(req: Request, res: Resp
       if (typeof body.isActive !== "boolean") {
          return next(createHttpError.BadRequest("invalid value or isActive required"));
       }
-      if (!isDocumentId(employeeID)) {
+      if (!isValidObjectId(employeeID)) {
          return next(createHttpError.BadRequest("employeeID is invalid"));
       }
       const employee = await Employee.findOne({
