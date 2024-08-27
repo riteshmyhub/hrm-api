@@ -22,8 +22,8 @@ export default async function DeleteEmployeeController(req: Request, res: Respon
       if (req.user?._id.toString() !== employee.employee_details?.company?.toString()) {
          return next(createHttpError.NotFound("Employee not found!"));
       }
-      await Employee.findByIdAndDelete({ _id });
       await bucket.deleteFile(employee._id.toString());
+      await Employee.findByIdAndDelete({ _id });
       res.status(201).json({
          message: "Single employee successfully deleted!",
          data: {},
