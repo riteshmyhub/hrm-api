@@ -1,14 +1,15 @@
 import { Router } from "express";
-import register from "./register/register";
-import login from "./login/login";
-import { forgotPassword, resetPassword } from "./forgot-password/forgot-password";
-import authUser from "./user/auth-user";
+import RegisterController from "./register/register.controller";
+import LoginController from "./login/login.controller";
+import ForgotPasswordController from "./forgot-password/forgot-password.controller";
+import ResetPasswordController from "./reset-password/reset-password.controller";
+import AuthUserController from "./user/auth-user";
 import AuthGuard from "../../../middlewares/auth.guard";
 
 const authRoutes = Router();
-authRoutes.post("/register", register);
-authRoutes.post("/login", login);
-authRoutes.post("/forgot-password", forgotPassword);
-authRoutes.post("/reset-password", resetPassword);
-authRoutes.get("/user", [AuthGuard], authUser);
+authRoutes.post("/register", RegisterController);
+authRoutes.post("/login", LoginController);
+authRoutes.post("/forgot-password", ForgotPasswordController);
+authRoutes.post("/reset-password", ResetPasswordController);
+authRoutes.get("/session", [AuthGuard], AuthUserController);
 export default authRoutes;
