@@ -5,13 +5,20 @@ import Company from "../../../../models/company.model";
 import Employee from "../../../../models/employee.model";
 import { createAccessToken } from "../../../../utils/functions/token";
 
-type Body = {
+type ReqBody = {
    email: string;
    password: string;
 };
-export default async function LoginController(req: Request, res: Response, next: NextFunction) {
+
+type ReqQuery = {};
+
+type ReqParms = {};
+
+type Req = Request<ReqParms, {}, ReqBody, ReqQuery>;
+
+export default async function LoginController(req: Req, res: Response, next: NextFunction) {
    try {
-      const { email, password }: Body = req.body;
+      const { email, password } = req.body;
       if (!email || !password) {
          return next(createHttpError.BadRequest("email , password  is required"));
       }

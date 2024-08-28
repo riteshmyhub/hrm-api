@@ -6,7 +6,7 @@ import cookieParser from "cookie-parser";
 import httpErrors from "http-errors";
 import routes from "./api/routes";
 import fileUpload from "express-fileupload";
-import { bucket, corsConfig } from "./libs/libs";
+import { bucket, corsOptions } from "./libs/libs";
 import helmet from "helmet";
 import morgan from "morgan";
 
@@ -22,7 +22,7 @@ const port: number = Number(process.env.PORT) || 3000;
 if (process.env.AUTH_MODE_TYPE === "http-cookies-auth") app.use(cookieParser());
 app.use(helmet());
 app.use(morgan(":method | :url | :status | :response-time ms"));
-app.use(corsConfig());
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(fileUpload({ useTempFiles: true }));

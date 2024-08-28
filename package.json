@@ -4,11 +4,10 @@
    "description": "",
    "main": "index.js",
    "scripts": {
-      "start": "nodemon",
+      "start": "node ./dist/main.js",
       "remove-cache": "npm cache clean --force",
       "build": "tsc -p . && vercel --prod",
-      "prod": "node ./dist/main.js",
-      "test": "echo \"Error: no test specified\" && exit 1"
+      "dev": "nodemon ./src/main.ts"
    },
    "keywords": [],
    "author": "",
@@ -33,7 +32,6 @@
    },
    "dependencies": {
       "bcryptjs": "^2.4.3",
-      "body-parser": "^1.20.2",
       "cloudinary": "^2.4.0",
       "cookie-parser": "^1.4.6",
       "cors": "^2.8.5",
@@ -45,12 +43,9 @@
       "jsonwebtoken": "^9.0.2",
       "mongoose": "^8.4.1",
       "morgan": "^1.10.0",
-      "multer": "^1.4.5-lts.1",
       "nodemailer": "^6.9.13",
       "nodemailer-express-handlebars": "^6.1.2",
       "socket.io": "^4.7.5",
-      "swagger-jsdoc": "^6.2.8",
-      "swagger-ui-express": "^5.0.1",
       "zod": "^3.23.8"
    }
 }

@@ -8,7 +8,7 @@ const routes = Router();
 routes.get("/", (req, res) => {
    res.status(200).json({
       message: "welcome to project buddy api",
-   });
+   }); 
 });
 routes.use("/auth", authRoutes);
 routes.use("/company", companyRoutes);
