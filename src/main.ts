@@ -9,12 +9,12 @@ import fileUpload from "express-fileupload";
 import { bucket, corsOptions } from "./libs/libs";
 import helmet from "helmet";
 import morgan from "morgan";
+import { app, server } from "./socket/socket";
 
 interface CustomError extends Error {
    status?: number;
 }
 
-const app = express();
 bucket.init();
 const port: number = Number(process.env.PORT) || 3000;
 
@@ -41,7 +41,7 @@ app.use((err: CustomError, req: Request, res: Response, next: NextFunction) => {
 //run server
 (async function () {
    try {
-      app.listen(port, () => {
+      server.listen(port, () => {
          console.log(`------------------------------------------------------`);
          console.log(`server : http://localhost:${port}/api/v1  🚀🚀🚀....🌐`);
          console.log(`auth mode : ${process.env.AUTH_MODE_TYPE}`);
